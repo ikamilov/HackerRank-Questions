@@ -1,18 +1,21 @@
-read size
-read input
-p=0
-n=0
-e=0
-for ((i=0; i< $size; i++)) 
+read n
+IFS=' ' read -a arr
+plus=0
+minus=0
+zero=0
+for i in $(seq 0 $(echo "$n-1" | bc))
 do
-  if [ $input -gt 0 ]; then
-    p=$((p+1))
-  elif [ $input -lt 0 ]; then
-    n=$((n+1))
-  elif [ $inut == 0]; then
-    e=$((e+1))
-  fi
+    s=${arr[$i]}
+    if [[ $s == "0" ]]
+    then
+        zero=$((zero+1))
+    elif [[ $s == "-"* ]]
+    then
+        minus=$((minus+1))
+    else
+        plus=$((plus+1))
+    fi
 done
-printf "%.6f\n" `echo "$p / $size" | bc -l`
-printf "%.6f\n" `echo "$n / $size" | bc -l`
-printf "%.6f\n" `echo "$e / $size" | bc -l`
+printf "%.3f\n" $(bc -q -l <<<  "$plus/$n" )
+printf "%.3f\n" $(bc -q -l <<<  "$minus/$n" )
+printf "%.3f\n" $(bc -q -l <<<  "$zero/$n")
